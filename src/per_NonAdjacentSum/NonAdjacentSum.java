@@ -22,7 +22,9 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
 
-	private int buttonPressed = 0;
+	public int searchArray[] = new int[NUMBER_OF_NUMBERS];
+
+//	private int buttonPressed = 0;
 
 	public NonAdjacentSum()
 	{
@@ -38,8 +40,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 //		panel.add(labelNum1);
 
 		/*
-		 * creates the the necessary labels and input fields made
-		 * possible by the constant NUMBER_OF_NUMBERS current
+		 * creates the the necessary labels and input fields made possible by the
+		 * constant NUMBER_OF_NUMBERS current
 		 */
 
 		int currentDisplayNum = 1;
@@ -105,6 +107,11 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		int maxNonAdjacentSum = 0;
 
 		return maxNonAdjacentSum;
+	}
+
+	public void incramentSearchCount()
+	{
+
 	}
 
 	public void actionPerformed(ActionEvent e)
