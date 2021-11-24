@@ -22,7 +22,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
 
-	private int searchCounter = 0;
+//	private int searchCounter = -1;
 
 //	private int buttonPressed = 0;
 
@@ -70,6 +70,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 					tempParsingValue = numberInput[i].getText();
 					valueArray[i] = Integer.parseInt(tempParsingValue);
 				}
+				solveSum(valueArray);
 
 				{ // non block block for debug
 					System.out.println(valueArray[0]);
@@ -105,8 +106,20 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public int solveSum(int[] values)
 	{
 		int maxNonAdjacentSum = 0;
+		int searchCounter = 0;
+		String binarySearchString = Integer.toBinaryString(searchCounter);
+		int valueCursor = -1;
 
-		Integer.toBinaryString(searchCounter);
+		while (valueCursor < NUMBER_OF_NUMBERS)
+		{
+
+			if (binarySearchString.charAt(0) == 0)
+			{
+				System.out.println("l");
+				valueCursor += 1;
+			} else if (binarySearchString.charAt(0) == 1)
+				valueCursor += 2;
+		}
 
 		return maxNonAdjacentSum;
 	}
