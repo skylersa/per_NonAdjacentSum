@@ -2,6 +2,7 @@ package per_NonAdjacentSum;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,11 +22,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
-//	private int selectedVals[] = new int[NUMBER_OF_NUMBERS / 2];
-
-//	private int searchCounter = -1;
-
-//	private int buttonPressed = 0;
+	private static Dimension myDimension = new Dimension(80, 26);
 
 	public NonAdjacentSum()
 	{
@@ -35,14 +32,14 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		// rows will be auto calculate based on how many it needs -
 		// # of components probably needs to be even
-		GridLayout panelLayout = new GridLayout(0, 2);
+		GridLayout panelLayout = new GridLayout(NUMBER_OF_NUMBERS + 1, 2);
 		panel.setLayout(panelLayout);
 //		JLabel labelNum1 = new JLabel("#1");
 //		panel.add(labelNum1);
 
 		/*
-		 * creates the the necessary labels and input fields made possible by the
-		 * constant NUMBER_OF_NUMBERS current
+		 * creates the the necessary labels and input fields made
+		 * possible by the constant NUMBER_OF_NUMBERS current
 		 */
 
 		int currentDisplayNum = 1;
@@ -85,6 +82,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		Container myContainer = getContentPane();
 		myContainer.add(panel, BorderLayout.CENTER);
+//		myContainer.add(buttonToCalculate);
+//		myContainer.add(buttonToRandomize);
+
+//		myContainer.add(myContainer);
 	}
 
 	public int solveSum()
@@ -106,7 +107,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			{
 				binarySearchString = "0" + binarySearchString;
 			}
-			System.out.println("combo of skips for this round: " + binarySearchString);
+//			System.out.println("combo of skips for this round: " + binarySearchString);
 
 			valueCursor = -2;
 			totalForRound = 0;
@@ -114,19 +115,13 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			// runs once for each skip
 			while (binarySearcherCursor <= binarySearchString.length() - 1)
 			{
-				if (Character.toString(binarySearchString.charAt(binarySearcherCursor)).equals("1"))
-				{
-					valueCursor += 3;
-				} else
-				{
-					valueCursor += 2;
-				}
-				if (valueCursor < NUMBER_OF_NUMBERS)
-				{
-					System.out.println(valueArray[valueCursor]);
-					totalForRound = totalForRound + valueArray[valueCursor];
-				}
+				valueCursor += 2;
+//				System.out.println(binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1));
+				if (binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1).equals("1"))
+					valueCursor++;
 
+				if (valueCursor < NUMBER_OF_NUMBERS)
+					totalForRound = totalForRound + valueArray[valueCursor];
 				binarySearcherCursor++;
 			}
 			if (totalForRound > currentBestTotal)
@@ -134,12 +129,12 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 				currentBestTotal = totalForRound;
 				highestEarlyCombo = binarySearchString;
 			}
-			System.out.println("for that round: " + totalForRound + "best so far: " + currentBestTotal);
+//			System.out.println("for that round: " + totalForRound + ", best so far: " + currentBestTotal);
 			searchCounter++;
 		}
 		// gives final answer with first combo that got high answer
-		System.out.println(
-				"the highest non adjacent sum is " + currentBestTotal + " using the combonation: " + highestEarlyCombo);
+		System.out.println("the highest non adjacent sum is " + currentBestTotal + " using the combonation: "
+				+ highestEarlyCombo);
 		return maxNonAdjacentSum;
 	}
 
@@ -150,7 +145,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(300, 300, 100, NUMBER_OF_NUMBERS * 26);
+		window.setBounds(	300,
+							50,
+							(int) (myDimension.getWidth() * 2),
+							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
