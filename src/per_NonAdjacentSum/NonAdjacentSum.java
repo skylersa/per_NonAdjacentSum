@@ -45,7 +45,6 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		int currentDisplayNum = 1;
 		for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
 		{
-
 			numberLabel[i] = new JLabel("#" + currentDisplayNum);
 			numberLabel[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			panel.add(numberLabel[i]);
@@ -82,10 +81,6 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		Container myContainer = getContentPane();
 		myContainer.add(panel, BorderLayout.CENTER);
-//		myContainer.add(buttonToCalculate);
-//		myContainer.add(buttonToRandomize);
-
-//		myContainer.add(myContainer);
 	}
 
 	public int solveSum()
@@ -103,7 +98,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		while (binarySearchString.contains("0"))
 		{
 			binarySearchString = Integer.toBinaryString(searchCounter);
-			while (binarySearchString.length() < NUMBER_OF_NUMBERS / 2/* + (NUMBER_OF_NUMBERS % 2) */)
+			while (binarySearchString.length() < NUMBER_OF_NUMBERS / 2)
 			{
 				binarySearchString = "0" + binarySearchString;
 			}
@@ -117,8 +112,11 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			{
 				valueCursor += 2;
 //				System.out.println(binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1));
-				if (binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1).equals("1"))
-					valueCursor++;
+				valueCursor += Integer
+						.parseInt(binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1));
+//					
+//				System.out.println((int) binarySearchString.charAt(binarySearcherCursor));
+//				valueCursor += (int) binarySearchString.charAt(binarySearcherCursor);
 
 				if (valueCursor < NUMBER_OF_NUMBERS)
 					totalForRound = totalForRound + valueArray[valueCursor];
