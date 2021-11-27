@@ -16,11 +16,12 @@ import javax.swing.SwingConstants;
 public class NonAdjacentSum extends JFrame implements ActionListener
 {
 
-	private final int NUMBER_OF_NUMBERS = 7;
+	private static final int NUMBER_OF_NUMBERS = 10;
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
+//	private int selectedVals[] = new int[NUMBER_OF_NUMBERS / 2];
 
 //	private int searchCounter = -1;
 
@@ -40,8 +41,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 //		panel.add(labelNum1);
 
 		/*
-		 * creates the the necessary labels and input fields made
-		 * possible by the constant NUMBER_OF_NUMBERS current
+		 * creates the the necessary labels and input fields made possible by the
+		 * constant NUMBER_OF_NUMBERS current
 		 */
 
 		int currentDisplayNum = 1;
@@ -64,24 +65,9 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				String tempParsingValue;
 				for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
-				{
-					tempParsingValue = numberInput[i].getText();
-					valueArray[i] = Integer.parseInt(tempParsingValue);
-				}
-				solveSum(valueArray);
-
-				{ // non block block for debug
-					System.out.println(valueArray[0]);
-					System.out.println(valueArray[1]);
-					System.out.println(valueArray[2]);
-					System.out.println(valueArray[3]);
-					System.out.println(valueArray[4]);
-					System.out.println(valueArray[5]);
-					System.out.println(valueArray[6]);
-				}
-
+					valueArray[i] = Integer.parseInt(numberInput[i].getText());
+				solveSum();
 			}
 		});
 		panel.add(buttonToCalculate);
@@ -99,26 +85,61 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		Container myContainer = getContentPane();
 		myContainer.add(panel, BorderLayout.CENTER);
-//		myContainer.add(buttonToCalculate, BorderLayout.SOUTH);
-//		myContainer.add(myContainer)
 	}
 
-	public int solveSum(int[] values)
+	public int solveSum()
 	{
 		int maxNonAdjacentSum = 0;
 		int searchCounter = 0;
-		String binarySearchString = Integer.toBinaryString(searchCounter);
-		int valueCursor = -1;
+		String binarySearchString = "0";
+		int binarySearcherCursor;
+		int valueCursor;
+		int currentBestTotal = -1;
+		String highestEarlyCombo = "L";
+		int totalForRound;
 
-		while (valueCursor < NUMBER_OF_NUMBERS)
+		// runs once for each possible combonation of skips
+		while (binarySearchString.contains("0"))
 		{
+			binarySearchString = Integer.toBinaryString(searchCounter);
+			while (binarySearchString.length() < NUMBER_OF_NUMBERS / 2/* + (NUMBER_OF_NUMBERS % 2) */)
+			{
+				binarySearchString = "0" + binarySearchString;
+			}
+			System.out.println("combo of skips for this round: " + binarySearchString);
 
-			if (binarySearchString.charAt(0) == 1)
-				valueCursor += 3;
-			else
-				valueCursor += 2;
+			valueCursor = -2;
+			totalForRound = 0;
+			binarySearcherCursor = 0;
+			// runs once for each skip
+			while (binarySearcherCursor <= binarySearchString.length() - 1)
+			{
+				if (Character.toString(binarySearchString.charAt(binarySearcherCursor)).equals("1"))
+				{
+					valueCursor += 3;
+				} else
+				{
+					valueCursor += 2;
+				}
+				if (valueCursor < NUMBER_OF_NUMBERS)
+				{
+					System.out.println(valueArray[valueCursor]);
+					totalForRound = totalForRound + valueArray[valueCursor];
+				}
+
+				binarySearcherCursor++;
+			}
+			if (totalForRound > currentBestTotal)
+			{
+				currentBestTotal = totalForRound;
+				highestEarlyCombo = binarySearchString;
+			}
+			System.out.println("for that round: " + totalForRound + "best so far: " + currentBestTotal);
+			searchCounter++;
 		}
-
+		// gives final answer with first combo that got high answer
+		System.out.println(
+				"the highest non adjacent sum is " + currentBestTotal + " using the combonation: " + highestEarlyCombo);
 		return maxNonAdjacentSum;
 	}
 
@@ -129,7 +150,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(300, 300, 100, 180);
+		window.setBounds(300, 300, 100, NUMBER_OF_NUMBERS * 26);
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
