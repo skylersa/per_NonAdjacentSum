@@ -40,8 +40,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 //		panel.add(labelNum1);
 
 		/*
-		 * creates the the necessary labels and input fields made possible by the
-		 * constant NUMBER_OF_NUMBERS current
+		 * creates the the necessary labels and input fields made
+		 * possible by the constant NUMBER_OF_NUMBERS current
 		 */
 
 		int currentDisplayNum = 1;
@@ -113,11 +113,9 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		while (valueCursor < NUMBER_OF_NUMBERS)
 		{
 
-			if (binarySearchString.charAt(0) == 0)
-			{
-				System.out.println("l");
-				valueCursor += 1;
-			} else if (binarySearchString.charAt(0) == 1)
+			if (binarySearchString.charAt(0) == 1)
+				valueCursor += 3;
+			else
 				valueCursor += 2;
 		}
 
