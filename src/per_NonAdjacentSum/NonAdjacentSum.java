@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 public class NonAdjacentSum extends JFrame implements ActionListener
 {
 
-	private static final int NUMBER_OF_NUMBERS = 10;
+	private static final int NUMBER_OF_NUMBERS = 30;
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
