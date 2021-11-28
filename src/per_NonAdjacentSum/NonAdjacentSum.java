@@ -1,6 +1,7 @@
 package per_NonAdjacentSum;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -21,8 +22,11 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
+	private JTextField solutionOutput, solutionComboOutput;
+
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
-	private static Dimension myDimension = new Dimension(80, 26);
+
+	private static Dimension myDimension = new Dimension(120, 26);
 
 	public NonAdjacentSum()
 	{
@@ -32,30 +36,36 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		// rows will be auto calculate based on how many it needs -
 		// # of components probably needs to be even
-		GridLayout panelLayout = new GridLayout(NUMBER_OF_NUMBERS + 1, 2);
+		GridLayout panelLayout = new GridLayout(NUMBER_OF_NUMBERS + 2, 2);
 		panel.setLayout(panelLayout);
-//		JLabel labelNum1 = new JLabel("#1");
-//		panel.add(labelNum1);
 
-		/*
-		 * creates the the necessary labels and input fields made
-		 * possible by the constant NUMBER_OF_NUMBERS current
-		 */
+//		creates the the necessary labels and input fields made
+//		possible by the constant NUMBER_OF_NUMBERS current
 
-		int currentDisplayNum = 1;
 		for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
 		{
-			numberLabel[i] = new JLabel("#" + currentDisplayNum);
+			numberLabel[i] = new JLabel("#" + (i + 1));
 			numberLabel[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			panel.add(numberLabel[i]);
 
 			numberInput[i] = new JTextField();
 			numberInput[i].setHorizontalAlignment(JTextField.LEFT);
 			panel.add(numberInput[i]);
-
-			currentDisplayNum++;
 		}
-//		ActionEvent solvePressed = new ActionEvent(this)
+
+		solutionOutput = new JTextField();
+		solutionOutput.setHorizontalAlignment(SwingConstants.CENTER);
+		solutionOutput.setEditable(false);
+		solutionOutput.setBackground(Color.GRAY);
+		panel.add(solutionOutput);
+
+		solutionComboOutput = new JTextField();
+		solutionComboOutput.setHorizontalAlignment(SwingConstants.CENTER);
+		solutionComboOutput.setEditable(false);
+		solutionComboOutput.setBackground(Color.GRAY);
+
+		panel.add(solutionComboOutput);
+
 		JButton buttonToCalculate = new JButton("solve");
 		buttonToCalculate.addActionListener(new ActionListener()
 		{
@@ -85,7 +95,6 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 	public int solveSum()
 	{
-		int maxNonAdjacentSum = 0;
 		int searchCounter = 0;
 		String binarySearchString = "0";
 		int binarySearcherCursor;
@@ -105,35 +114,36 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 //			System.out.println("combo of skips for this round: " + binarySearchString);
 
 			valueCursor = -2;
-			totalForRound = 0;
 			binarySearcherCursor = 0;
+			totalForRound = 0;
+
 			// runs once for each skip
 			while (binarySearcherCursor <= binarySearchString.length() - 1)
 			{
 				valueCursor += 2;
-//				System.out.println(binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1));
 				valueCursor += Integer
 						.parseInt(binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1));
-//					
-//				System.out.println((int) binarySearchString.charAt(binarySearcherCursor));
-//				valueCursor += (int) binarySearchString.charAt(binarySearcherCursor);
 
 				if (valueCursor < NUMBER_OF_NUMBERS)
 					totalForRound = totalForRound + valueArray[valueCursor];
 				binarySearcherCursor++;
 			}
+
 			if (totalForRound > currentBestTotal)
 			{
 				currentBestTotal = totalForRound;
 				highestEarlyCombo = binarySearchString;
 			}
+
 //			System.out.println("for that round: " + totalForRound + ", best so far: " + currentBestTotal);
 			searchCounter++;
 		}
+
 		// gives final answer with first combo that got high answer
-		System.out.println("the highest non adjacent sum is " + currentBestTotal + " using the combonation: "
-				+ highestEarlyCombo);
-		return maxNonAdjacentSum;
+		solutionOutput.setText("" + currentBestTotal);
+		solutionComboOutput.setText(highestEarlyCombo);
+
+		return currentBestTotal;
 	}
 
 	public void actionPerformed(ActionEvent e)
