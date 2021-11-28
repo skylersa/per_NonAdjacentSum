@@ -1,3 +1,8 @@
+// skyler sauer
+// 11/27
+// rev 4
+//notes:
+//
 package per_NonAdjacentSum;
 
 import java.awt.BorderLayout;
