@@ -24,6 +24,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 {
 
 	private static final int NUMBER_OF_NUMBERS = 30;
+	private final int RANGE_FOR_RAND = 30;
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
@@ -89,7 +90,12 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e)
 			{
 				for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
-					numberInput[i].setText(Integer.toString((int) (Math.random() * 20)));
+				{
+					if (Math.random() > .5)
+						numberInput[i].setText(Integer.toString((int) (Math.random() * RANGE_FOR_RAND)));
+					else
+						numberInput[i].setText(Integer.toString((int) (Math.random() * -RANGE_FOR_RAND)));
+				}
 			}
 		});
 		panel.add(buttonToRandomize);
@@ -158,10 +164,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(	300,
-							50,
-							(int) (myDimension.getWidth() * 2),
-							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
+				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
