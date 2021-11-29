@@ -1,13 +1,13 @@
 package per_NonAdjacentSum;
 
-public class baseN
+public class BaseN
 {
 	private int length;
 	private int base;
 	private int[] vals;
 	private int base10Counter;
 
-	public baseN(int baseIn, int lengthIn)
+	public BaseN(int baseIn, int lengthIn)
 	{
 		base = baseIn;
 		length = lengthIn;
