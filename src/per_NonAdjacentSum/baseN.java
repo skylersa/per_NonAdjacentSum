@@ -1,58 +1,117 @@
+//Skyler Sauer
+//11/29/21
+//rev 3
+// notes:
+//currently caps out at 100 numbers neg/pos, 
+//can be increased by increasing the size of 
+//the digit array
+
 package per_NonAdjacentSum;
 
 public class BaseN
 {
 	private int length;
 	private int base;
-	private int[] vals;
-	private int base10Counter;
-	private int cursor;
+	private int[] digit = new int[100];
+	private int counter;
+//	private int ursor;
+	private int min;
 
-	public BaseN(int baseIn, int lengthIn)
+	public BaseN(int baseIn, int lengthIn, int minIn)
 	{
 		base = baseIn;
-		length = lengthIn;
-		base10Counter = 0;
+		length = lengthIn - 1;
+		counter = 0;
+		min = minIn;
 
-		for (int i = 0; i < length; i++)
+		for (int i = 0; i <= length; i++)
 		{
-			vals[i] = 0;
+			digit[i] = min;
 		}
 
 	}
 
-	public boolean incramentVal(int byNum)
+	public void incrament()
 	{
-		base10Counter++;
-		vals[vals.length] += byNum;
+		this.incramentValBy(1);
+	}
 
-		cursor = vals.length;
+	public boolean incramentValBy(int byNum)
+	{
+		counter++;
+		digit[length] += byNum;
+
+		int cursor = length;
 
 		while (cursor > 0)
 		{
-			if (vals[cursor] > base)
+			if (digit[cursor] > base)
 			{
-				vals[cursor - 1]++;
-				vals[cursor] -= base;
+				digit[cursor - 1]++;
+
+				digit[cursor] = min + (base - digit[cursor] + 1);
 			}
 			cursor--;
 		}
 		if (cursor != 0)
 			System.out.println("err, BaseN, incrament, cursor not 0 !!");
-		if (vals[0] > base)
+		if (digit[0] > base)
 			return false;
 		else
 			return true;
 
 	}
 
-	public int getCounter()
+	// need method to ensure proper length of digit
+
+	public boolean contains(int val)
 	{
-		return base10Counter;
+		int i = length;
+
+		while (i > 0)
+		{
+//			System.out.println(i);
+			if (digit[i] == val)
+				return true;
+			else
+				i--;
+
+		}
+
+//		System.out.println("err, BaseN, contains, i start at 0 / length <= 0");
+		return false;
 	}
 
-	public int getVal(int place)
+	public String getCombo()
 	{
-		return vals[place];
+		String result = "" + digit[0];
+		int cursorGetCombo = 1;
+
+		while (cursorGetCombo <= length)
+		{
+			result += (", " + digit[cursorGetCombo]);
+			cursorGetCombo++;
+		}
+		return result;
+	}
+
+	public int getLength()
+	{
+		return length;
+	}
+
+//	public int getCursor()
+//	{
+//		return cursor;
+//	}
+
+	public int getCounter()
+	{
+		return counter;
+	}
+
+	public int getDigit(int place)
+	{
+		return digit[place];
 	}
 }

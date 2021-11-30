@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
 public class NonAdjacentSum extends JFrame implements ActionListener
 {
 
-	private static final int NUMBER_OF_NUMBERS = 30;
+	private static final int NUMBER_OF_NUMBERS = 15;
 	private final int RANGE_FOR_RAND = 30;
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
@@ -48,9 +48,17 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 //		creates the the necessary labels and input fields made
 //		possible by the constant NUMBER_OF_NUMBERS current
 
+		addGraphics(panel);
+
+		Container myContainer = getContentPane();
+		myContainer.add(panel, BorderLayout.CENTER);
+	}
+
+	private void addGraphics(JPanel panel)
+	{
 		for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
 		{
-			numberLabel[i] = new JLabel("#" + (i + 1));
+			numberLabel[i] = new JLabel("#" + (i));
 			numberLabel[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			panel.add(numberLabel[i]);
 
@@ -99,55 +107,51 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			}
 		});
 		panel.add(buttonToRandomize);
-
-		Container myContainer = getContentPane();
-		myContainer.add(panel, BorderLayout.CENTER);
 	}
 
 	public int solveSum()
 	{
-		int searchCounter = 0;
-		String binarySearchString = "0";
-		int binarySearcherCursor;
-		int valueCursor;
+		BaseN searcher = new BaseN(NUMBER_OF_NUMBERS, NUMBER_OF_NUMBERS / 2, 2);
 		int currentBestTotal = -1;
 		String highestEarlyCombo = "L";
 		int totalForRound;
+		int valueCursor;
+		int searchCursor;
+		int maxCount = (int) Math.pow((double) NUMBER_OF_NUMBERS, (double) NUMBER_OF_NUMBERS);
 
-		// runs once for each possible combonation of skips
-		while (binarySearchString.contains("0"))
+		// runs once for each possible combination of skips
+
+		while (searcher.getCounter() < maxCount)
 		{
-			binarySearchString = Integer.toBinaryString(searchCounter);
-			while (binarySearchString.length() < NUMBER_OF_NUMBERS / 2)
-			{
-				binarySearchString = "0" + binarySearchString;
-			}
 //			System.out.println("combo of skips for this round: " + binarySearchString);
 
 			valueCursor = -2;
-			binarySearcherCursor = 0;
 			totalForRound = 0;
+			searchCursor = 0;
 
 			// runs once for each skip
-			while (binarySearcherCursor <= binarySearchString.length() - 1)
+			// performs skip + add that value to the total for that
+			// round
+			while (searchCursor <= searcher.getLength())
 			{
-				valueCursor += 2;
-				valueCursor += Integer
-						.parseInt(binarySearchString.substring(binarySearcherCursor, binarySearcherCursor + 1));
-
+				valueCursor += searcher.getDigit(searchCursor);
 				if (valueCursor < NUMBER_OF_NUMBERS)
+				{
+					numberInput[valueCursor].setBackground(Color.YELLOW);
 					totalForRound = totalForRound + valueArray[valueCursor];
-				binarySearcherCursor++;
+				}
+				searchCursor++;
 			}
 
+//			System.out.println(totalForRound + "k" + currentBestTotal);
 			if (totalForRound > currentBestTotal)
 			{
 				currentBestTotal = totalForRound;
-				highestEarlyCombo = binarySearchString;
+				highestEarlyCombo = searcher.getCombo();
 			}
 
 //			System.out.println("for that round: " + totalForRound + ", best so far: " + currentBestTotal);
-			searchCounter++;
+			searcher.incrament();
 		}
 
 		// gives final answer with first combo that got high answer
@@ -155,6 +159,11 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		solutionComboOutput.setText(highestEarlyCombo);
 
 		return currentBestTotal;
+	}
+
+	public void highlight()
+	{
+
 	}
 
 	public void actionPerformed(ActionEvent e)
