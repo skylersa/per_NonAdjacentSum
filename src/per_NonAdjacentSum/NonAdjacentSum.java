@@ -164,8 +164,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
-				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(	300,
+							50,
+							(int) (myDimension.getWidth() * 2),
+							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}

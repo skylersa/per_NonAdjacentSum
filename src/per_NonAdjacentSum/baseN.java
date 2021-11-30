@@ -6,6 +6,7 @@ public class BaseN
 	private int base;
 	private int[] vals;
 	private int base10Counter;
+	private int cursor;
 
 	public BaseN(int baseIn, int lengthIn)
 	{
@@ -20,12 +21,12 @@ public class BaseN
 
 	}
 
-	public boolean incrament(int byNum)
+	public boolean incramentVal(int byNum)
 	{
 		base10Counter++;
 		vals[vals.length] += byNum;
 
-		int cursor = vals.length;
+		cursor = vals.length;
 
 		while (cursor > 0)
 		{
@@ -37,7 +38,7 @@ public class BaseN
 			cursor--;
 		}
 		if (cursor != 0)
-			System.out.println("err, incrament, cursor not 0 !!");
+			System.out.println("err, BaseN, incrament, cursor not 0 !!");
 		if (vals[0] > base)
 			return false;
 		else
@@ -48,5 +49,10 @@ public class BaseN
 	public int getCounter()
 	{
 		return base10Counter;
+	}
+
+	public int getVal(int place)
+	{
+		return vals[place];
 	}
 }
