@@ -23,8 +23,8 @@ import javax.swing.SwingConstants;
 public class NonAdjacentSum extends JFrame implements ActionListener
 {
 
-	private static final int NUMBER_OF_NUMBERS = 15;
-	private final int RANGE_FOR_RAND = 30;
+	private static final int NUMBER_OF_NUMBERS = 7;
+	private final int RANGE_FOR_RAND = 15;
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
@@ -137,7 +137,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 				valueCursor += searcher.getDigit(searchCursor);
 				if (valueCursor < NUMBER_OF_NUMBERS)
 				{
-					numberInput[valueCursor].setBackground(Color.YELLOW);
+//					numberInput[valueCursor].setBackground(Color.YELLOW);
 					totalForRound = totalForRound + valueArray[valueCursor];
 				}
 				searchCursor++;
@@ -146,6 +146,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 //			System.out.println(totalForRound + "k" + currentBestTotal);
 			if (totalForRound > currentBestTotal)
 			{
+				highlight(searcher);
 				currentBestTotal = totalForRound;
 				highestEarlyCombo = searcher.getCombo();
 			}
@@ -161,8 +162,17 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		return currentBestTotal;
 	}
 
-	public void highlight()
+	public void highlight(BaseN searcher)
 	{
+		int cursorHighlighter = -2;
+		int counterCursorHighlighter = 0;
+
+		while (cursorHighlighter < searcher.getLength())
+		{
+			System.out.println("l");
+			numberInput[cursorHighlighter].setBackground(Color.YELLOW);
+			cursorHighlighter += searcher.getDigit(counterCursorHighlighter);
+		}
 
 	}
 
@@ -173,10 +183,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(	300,
-							50,
-							(int) (myDimension.getWidth() * 2),
-							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
+				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
