@@ -30,6 +30,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
 	private JTextField solutionOutput, solutionComboOutput;
 
+	private int counterLength;
+
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
 
 	private static Dimension myDimension = new Dimension(120, 26);
@@ -86,7 +88,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e)
 			{
 				for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
+				{
+					numberInput[i].setBackground(Color.WHITE);
 					valueArray[i] = Integer.parseInt(numberInput[i].getText());
+				}
 				solveSum();
 			}
 		});
@@ -99,6 +104,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			{
 				for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
 				{
+					numberInput[i].setBackground(Color.WHITE);
 					if (Math.random() > .5)
 						numberInput[i].setText(Integer.toString((int) (Math.random() * RANGE_FOR_RAND)));
 					else
@@ -111,44 +117,51 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 	public int solveSum()
 	{
-		BaseN searcher = new BaseN(NUMBER_OF_NUMBERS, NUMBER_OF_NUMBERS / 2, 2);
-		int currentBestTotal = -1;
-		String highestEarlyCombo = "L";
+		BaseN searcher = new BaseN(NUMBER_OF_NUMBERS + 3, (NUMBER_OF_NUMBERS / 2) + (NUMBER_OF_NUMBERS % 2), 2);
+		int currentBestTotal = -255;
 		int totalForRound;
 		int valueCursor;
 		int searchCursor;
-		int maxCount = (int) Math.pow((double) NUMBER_OF_NUMBERS, (double) NUMBER_OF_NUMBERS);
+		counterLength = searcher.getLength();
+		System.out.println(searcher.getLength() + "j");
+		int[] currentSolutionSkips = new int[counterLength];
+		int cursorCurrentSolution;
+		int highestEarlyCombo[] = new int[counterLength];
+//		int maxCount = (int) Math.pow((double) NUMBER_OF_NUMBERS - 2, (double) NUMBER_OF_NUMBERS - 2);
 
 		// runs once for each possible combination of skips
 
-		while (searcher.getCounter() < maxCount)
+		while (!searcher.containsOnly(NUMBER_OF_NUMBERS + 3))
 		{
 //			System.out.println("combo of skips for this round: " + binarySearchString);
 
 			valueCursor = -2;
 			totalForRound = 0;
 			searchCursor = 0;
+			cursorCurrentSolution = 0;
 
 			// runs once for each skip
 			// performs skip + add that value to the total for that
 			// round
-			while (searchCursor <= searcher.getLength())
+			while (searchCursor < counterLength)
 			{
 				valueCursor += searcher.getDigit(searchCursor);
 				if (valueCursor < NUMBER_OF_NUMBERS)
 				{
 //					numberInput[valueCursor].setBackground(Color.YELLOW);
-					totalForRound = totalForRound + valueArray[valueCursor];
+					totalForRound += valueArray[valueCursor];
+					currentSolutionSkips[cursorCurrentSolution] = searcher.getDigit(searchCursor);
 				}
 				searchCursor++;
+				cursorCurrentSolution++;
 			}
 
 //			System.out.println(totalForRound + "k" + currentBestTotal);
 			if (totalForRound > currentBestTotal)
 			{
-				highlight(searcher);
 				currentBestTotal = totalForRound;
-				highestEarlyCombo = searcher.getCombo();
+				for (int i = 0; i < counterLength; i++)
+					highestEarlyCombo[i] = currentSolutionSkips[i];
 			}
 
 //			System.out.println("for that round: " + totalForRound + ", best so far: " + currentBestTotal);
@@ -157,21 +170,40 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		// gives final answer with first combo that got high answer
 		solutionOutput.setText("" + currentBestTotal);
-		solutionComboOutput.setText(highestEarlyCombo);
+		{
+			String highestEarlyComboOutput = "" + highestEarlyCombo[0];
+			int cursorGetCombo = 1;
+
+			while (cursorGetCombo < counterLength)
+			{
+				highestEarlyComboOutput += (", " + highestEarlyCombo[cursorGetCombo]);
+				cursorGetCombo++;
+			}
+			solutionComboOutput.setText(highestEarlyComboOutput);
+		}
+		System.out.println(searcher.getNumberString());
+
+		highlight(highestEarlyCombo);
 
 		return currentBestTotal;
 	}
 
-	public void highlight(BaseN searcher)
+	public void highlight(int[] solutionSkips)
 	{
 		int cursorHighlighter = -2;
-		int counterCursorHighlighter = 0;
+//		System.out.println(searcher.getNumberString());
 
-		while (cursorHighlighter < searcher.getLength())
+		int cursorCounterHighlighter = 0;
+		cursorHighlighter += solutionSkips[cursorCounterHighlighter];
+		while (cursorHighlighter < NUMBER_OF_NUMBERS && cursorCounterHighlighter < counterLength)
 		{
-			System.out.println("l");
+			cursorCounterHighlighter++;
+			System.out.println("l" + solutionSkips[cursorCounterHighlighter]);
 			numberInput[cursorHighlighter].setBackground(Color.YELLOW);
-			cursorHighlighter += searcher.getDigit(counterCursorHighlighter);
+			System.out.println("f" + cursorCounterHighlighter + "g" + cursorHighlighter);
+
+			cursorHighlighter += solutionSkips[cursorCounterHighlighter];
+			System.out.println(cursorHighlighter + " " + NUMBER_OF_NUMBERS);
 		}
 
 	}
@@ -183,8 +215,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
-				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(	300,
+							50,
+							(int) (myDimension.getWidth() * 2),
+							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}

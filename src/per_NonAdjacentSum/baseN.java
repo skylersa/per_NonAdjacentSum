@@ -20,7 +20,7 @@ public class BaseN
 	public BaseN(int baseIn, int lengthIn, int minIn)
 	{
 		base = baseIn;
-		length = lengthIn - 1;
+		length = lengthIn;
 		counter = 0;
 		min = minIn;
 
@@ -82,7 +82,21 @@ public class BaseN
 		return false;
 	}
 
-	public String getCombo()
+	public boolean containsOnly(int val)
+	{
+//		boolean hasOtherDigit = false;
+
+		for (int i = length; i >= 0; i--)
+		{
+			if (digit[i] == val)
+				continue;
+			else
+				return false;
+		}
+		return true;
+	}
+
+	public String getNumberString()
 	{
 		String result = "" + digit[0];
 		int cursorGetCombo = 1;
@@ -108,6 +122,21 @@ public class BaseN
 	public int getCounter()
 	{
 		return counter;
+	}
+
+	public int sumDigits()
+	{
+		int total = 0;
+		for (int i = 0; i <= length; i++)
+		{
+			total += digit[i];
+		}
+		return total;
+	}
+
+	public void setDigit(int place, int val)
+	{
+
 	}
 
 	public int getDigit(int place)
