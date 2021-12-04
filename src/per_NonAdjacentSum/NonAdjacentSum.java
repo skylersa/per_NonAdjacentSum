@@ -168,24 +168,28 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			searcher.incrament();
 		}
 
-		// gives final answer with first combo that got high answer
-		solutionOutput.setText("" + currentBestTotal);
+		return currentBestTotal;
+	}
+
+	// gives final answer with first combo that got high answer
+	public void displayAnswers(int total, int[] skips, BaseN searcher)
+	{
+		solutionOutput.setText("" + total);
 		{
-			String highestEarlyComboOutput = "" + highestEarlyCombo[0];
+			String highestEarlyComboOutput = "" + skips[0];
 			int cursorGetCombo = 1;
 
 			while (cursorGetCombo < counterLength)
 			{
-				highestEarlyComboOutput += (", " + highestEarlyCombo[cursorGetCombo]);
+				highestEarlyComboOutput += (", " + skips[cursorGetCombo]);
 				cursorGetCombo++;
 			}
 			solutionComboOutput.setText(highestEarlyComboOutput);
 		}
 		System.out.println(searcher.getNumberString());
 
-		highlight(highestEarlyCombo);
+		highlight(skips);
 
-		return currentBestTotal;
 	}
 
 	public void highlight(int[] solutionSkips)
@@ -215,10 +219,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(	300,
-							50,
-							(int) (myDimension.getWidth() * 2),
-							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
+				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
