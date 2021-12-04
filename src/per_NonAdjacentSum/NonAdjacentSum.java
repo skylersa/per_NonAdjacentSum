@@ -143,25 +143,30 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			// runs once for each skip
 			// performs skip + add that value to the total for that
 			// round
-			while (searchCursor < counterLength)
+			while (searchCursor < counterLength && valueCursor < NUMBER_OF_NUMBERS)
 			{
 				valueCursor += searcher.getDigit(searchCursor);
 				if (valueCursor < NUMBER_OF_NUMBERS)
 				{
-//					numberInput[valueCursor].setBackground(Color.YELLOW);
 					totalForRound += valueArray[valueCursor];
+				}
+
+				{ // changes currentSolutionSkips to be more "displayable"
 					currentSolutionSkips[cursorCurrentSolution] = searcher.getDigit(searchCursor);
 				}
+
 				searchCursor++;
 				cursorCurrentSolution++;
 			}
 
 //			System.out.println(totalForRound + "k" + currentBestTotal);
-			if (totalForRound > currentBestTotal)
+			if (totalForRound >= currentBestTotal)
 			{
 				currentBestTotal = totalForRound;
 				for (int i = 0; i < counterLength; i++)
+				{
 					highestEarlyCombo[i] = currentSolutionSkips[i];
+				}
 			}
 
 //			System.out.println("for that round: " + totalForRound + ", best so far: " + currentBestTotal);
@@ -178,10 +183,23 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		{
 			String highestEarlyComboOutput = "" + skips[0];
 			int cursorGetCombo = 1;
+//			int cursorSoultionValue = -2;
 
 			while (cursorGetCombo < counterLength)
 			{
+<<<<<<< Updated upstream
 				highestEarlyComboOutput += (", " + skips[cursorGetCombo]);
+=======
+<<<<<<< HEAD
+//				if (cursorGetCombo == 0)
+//					currentSolutionSkips[cursorCurrentSolution] -= 2;
+//				if (!cursorSolutionValue > NUMBER_OF_NUMBERS)
+				highestEarlyComboOutput += (", " + highestEarlyCombo[cursorGetCombo]);
+
+=======
+				highestEarlyComboOutput += (", " + skips[cursorGetCombo]);
+>>>>>>> e34c63102dcdbe6bd8e6a1b197ceb642ff2e1b99
+>>>>>>> Stashed changes
 				cursorGetCombo++;
 			}
 			solutionComboOutput.setText(highestEarlyComboOutput);
@@ -199,7 +217,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		int cursorCounterHighlighter = 0;
 		cursorHighlighter += solutionSkips[cursorCounterHighlighter];
-		while (cursorHighlighter < NUMBER_OF_NUMBERS && cursorCounterHighlighter < counterLength)
+		while (cursorHighlighter < NUMBER_OF_NUMBERS && cursorCounterHighlighter < counterLength - 1)
 		{
 			cursorCounterHighlighter++;
 			System.out.println("l" + solutionSkips[cursorCounterHighlighter]);
