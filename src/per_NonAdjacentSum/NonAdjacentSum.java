@@ -173,41 +173,29 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			searcher.incrament();
 		}
 
-		return currentBestTotal;
-	}
-
-	// gives final answer with first combo that got high answer
-	public void displayAnswers(int total, int[] skips, BaseN searcher)
-	{
-		solutionOutput.setText("" + total);
+		// gives final answer with first combo that got high answer
+		solutionOutput.setText("" + currentBestTotal);
 		{
-			String highestEarlyComboOutput = "" + skips[0];
+			String highestEarlyComboOutput = "" + highestEarlyCombo[0];
 			int cursorGetCombo = 1;
 //			int cursorSoultionValue = -2;
 
 			while (cursorGetCombo < counterLength)
 			{
-<<<<<<< Updated upstream
-				highestEarlyComboOutput += (", " + skips[cursorGetCombo]);
-=======
-<<<<<<< HEAD
 //				if (cursorGetCombo == 0)
 //					currentSolutionSkips[cursorCurrentSolution] -= 2;
 //				if (!cursorSolutionValue > NUMBER_OF_NUMBERS)
 				highestEarlyComboOutput += (", " + highestEarlyCombo[cursorGetCombo]);
 
-=======
-				highestEarlyComboOutput += (", " + skips[cursorGetCombo]);
->>>>>>> e34c63102dcdbe6bd8e6a1b197ceb642ff2e1b99
->>>>>>> Stashed changes
 				cursorGetCombo++;
 			}
 			solutionComboOutput.setText(highestEarlyComboOutput);
 		}
 		System.out.println(searcher.getNumberString());
 
-		highlight(skips);
+		highlight(highestEarlyCombo);
 
+		return currentBestTotal;
 	}
 
 	public void highlight(int[] solutionSkips)
@@ -237,8 +225,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
-				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(	300,
+							50,
+							(int) (myDimension.getWidth() * 2),
+							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
