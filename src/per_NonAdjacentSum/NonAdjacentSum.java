@@ -92,7 +92,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 					numberInput[i].setBackground(Color.WHITE);
 					valueArray[i] = Integer.parseInt(numberInput[i].getText());
 				}
-				solveSum();
+				outputAnswers(solveSum());
 			}
 		});
 		panel.add(buttonToCalculate);
@@ -174,28 +174,32 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		}
 
 		// gives final answer with first combo that got high answer
-		solutionOutput.setText("" + currentBestTotal);
-		{
-			String highestEarlyComboOutput = "" + highestEarlyCombo[0];
-			int cursorGetCombo = 1;
-//			int cursorSoultionValue = -2;
 
-			while (cursorGetCombo < counterLength)
+		return currentBestTotal;
+	}
+
+	public void outputAnswers(String outType, int[] bestSkips, int bestTotal)
+	{
+		if (outType.equals("display"))
+		{
+			solutionOutput.setText("" + bestTotal);
+			String resultSkipsText = "" + bestSkips[0];
+			;
+			int cursor = 1;
+
+			while (cursor < counterLength)
 			{
 //				if (cursorGetCombo == 0)
 //					currentSolutionSkips[cursorCurrentSolution] -= 2;
 //				if (!cursorSolutionValue > NUMBER_OF_NUMBERS)
-				highestEarlyComboOutput += (", " + highestEarlyCombo[cursorGetCombo]);
+				resultSkipsText += (", " + bestSkips[cursor]);
 
-				cursorGetCombo++;
+				cursor++;
 			}
-			solutionComboOutput.setText(highestEarlyComboOutput);
+
+			solutionComboOutput.setText(resultSkipsText);
+			highlight(bestSkips);
 		}
-		System.out.println(searcher.getNumberString());
-
-		highlight(highestEarlyCombo);
-
-		return currentBestTotal;
 	}
 
 	public void highlight(int[] solutionSkips)
@@ -225,10 +229,8 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(	300,
-							50,
-							(int) (myDimension.getWidth() * 2),
-							(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
+				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
