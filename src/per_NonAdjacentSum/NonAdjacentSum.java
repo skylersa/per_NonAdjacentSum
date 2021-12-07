@@ -28,13 +28,13 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 	private JLabel[] numberLabel = new JLabel[NUMBER_OF_NUMBERS];
 	private JTextField numberInput[] = new JTextField[NUMBER_OF_NUMBERS];
-	private JTextField solutionOutput, solutionComboOutput;
+	private JTextField solutionOutputBox, solutionComboOutput;
 
 	private int counterLength;
 
 	private int valueArray[] = new int[NUMBER_OF_NUMBERS];
 
-	private static Dimension myDimension = new Dimension(120, 26);
+	private static Dimension boxSize = new Dimension(120, 20);
 
 	public NonAdjacentSum()
 	{
@@ -42,13 +42,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 
 		JPanel panel = new JPanel();
 
-		// rows will be auto calculate based on how many it needs -
-		// # of components probably needs to be even
-		GridLayout panelLayout = new GridLayout(NUMBER_OF_NUMBERS + 2, 2);
-		panel.setLayout(panelLayout);
-
-//		creates the the necessary labels and input fields made
-//		possible by the constant NUMBER_OF_NUMBERS current
+		panel.setLayout(new GridLayout(NUMBER_OF_NUMBERS + 2, 2));
 
 		addGraphics(panel);
 
@@ -56,6 +50,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		myContainer.add(panel, BorderLayout.CENTER);
 	}
 
+	// creates the the necessary labels, inputs, outputs
 	private void addGraphics(JPanel panel)
 	{
 		for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
@@ -69,11 +64,11 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			panel.add(numberInput[i]);
 		}
 
-		solutionOutput = new JTextField();
-		solutionOutput.setHorizontalAlignment(SwingConstants.CENTER);
-		solutionOutput.setEditable(false);
-		solutionOutput.setBackground(Color.GRAY);
-		panel.add(solutionOutput);
+		solutionOutputBox = new JTextField();
+		solutionOutputBox.setHorizontalAlignment(SwingConstants.CENTER);
+		solutionOutputBox.setEditable(false);
+		solutionOutputBox.setBackground(Color.GRAY);
+		panel.add(solutionOutputBox);
 
 		solutionComboOutput = new JTextField();
 		solutionComboOutput.setHorizontalAlignment(SwingConstants.CENTER);
@@ -92,7 +87,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 					numberInput[i].setBackground(Color.WHITE);
 					valueArray[i] = Integer.parseInt(numberInput[i].getText());
 				}
-				outputAnswers(solveSum());
+				outputAnswers("display", solveSum());
 			}
 		});
 		panel.add(buttonToCalculate);
@@ -105,7 +100,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 				for (int i = 0; i < NUMBER_OF_NUMBERS; i++)
 				{
 					numberInput[i].setBackground(Color.WHITE);
-					if (Math.random() > .5)
+					if (Math.random() >= .5)
 						numberInput[i].setText(Integer.toString((int) (Math.random() * RANGE_FOR_RAND)));
 					else
 						numberInput[i].setText(Integer.toString((int) (Math.random() * -RANGE_FOR_RAND)));
@@ -115,7 +110,7 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		panel.add(buttonToRandomize);
 	}
 
-	public int solveSum()
+	public Answer solveSum()
 	{
 		BaseN searcher = new BaseN(NUMBER_OF_NUMBERS + 3, (NUMBER_OF_NUMBERS / 2) + (NUMBER_OF_NUMBERS % 2), 2);
 		int currentBestTotal = -255;
@@ -123,17 +118,13 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 		int valueCursor;
 		int searchCursor;
 		counterLength = searcher.getLength();
-		System.out.println(searcher.getLength() + "j");
 		int[] currentSolutionSkips = new int[counterLength];
 		int cursorCurrentSolution;
-		int highestEarlyCombo[] = new int[counterLength];
-//		int maxCount = (int) Math.pow((double) NUMBER_OF_NUMBERS - 2, (double) NUMBER_OF_NUMBERS - 2);
+		int highSmallLateCombo[] = new int[counterLength];
 
 		// runs once for each possible combination of skips
-
 		while (!searcher.containsOnly(NUMBER_OF_NUMBERS + 3))
 		{
-//			System.out.println("combo of skips for this round: " + binarySearchString);
 
 			valueCursor = -2;
 			totalForRound = 0;
@@ -141,83 +132,85 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 			cursorCurrentSolution = 0;
 
 			// runs once for each skip
-			// performs skip + add that value to the total for that
-			// round
+			// performs skip + adds skip to array thereof
 			while (searchCursor < counterLength && valueCursor < NUMBER_OF_NUMBERS)
 			{
 				valueCursor += searcher.getDigit(searchCursor);
 				if (valueCursor < NUMBER_OF_NUMBERS)
-				{
 					totalForRound += valueArray[valueCursor];
-				}
 
-				{ // changes currentSolutionSkips to be more "displayable"
-					currentSolutionSkips[cursorCurrentSolution] = searcher.getDigit(searchCursor);
-				}
+				currentSolutionSkips[cursorCurrentSolution] = searcher.getDigit(searchCursor);
 
 				searchCursor++;
 				cursorCurrentSolution++;
 			}
 
-//			System.out.println(totalForRound + "k" + currentBestTotal);
 			if (totalForRound >= currentBestTotal)
 			{
 				currentBestTotal = totalForRound;
 				for (int i = 0; i < counterLength; i++)
 				{
-					highestEarlyCombo[i] = currentSolutionSkips[i];
+					highSmallLateCombo[i] = currentSolutionSkips[i];
 				}
 			}
 
-//			System.out.println("for that round: " + totalForRound + ", best so far: " + currentBestTotal);
 			searcher.incrament();
 		}
 
-		// gives final answer with first combo that got high answer
-
-		return currentBestTotal;
+		return new Answer(highSmallLateCombo, currentBestTotal);
 	}
 
-	public void outputAnswers(String outType, int[] bestSkips, int bestTotal)
+	// displays, console out the answer using Answer object with
+	// getters/setters
+	public void outputAnswers(String outType, Answer answer)
 	{
-		if (outType.equals("display"))
+		switch (outType)
 		{
-			solutionOutput.setText("" + bestTotal);
-			String resultSkipsText = "" + bestSkips[0];
-			;
-			int cursor = 1;
 
-			while (cursor < counterLength)
-			{
-//				if (cursorGetCombo == 0)
-//					currentSolutionSkips[cursorCurrentSolution] -= 2;
-//				if (!cursorSolutionValue > NUMBER_OF_NUMBERS)
-				resultSkipsText += (", " + bestSkips[cursor]);
+			case "display":
+				solutionOutputBox.setText("" + answer.getTotal());
 
-				cursor++;
-			}
+				int cursorOnVals = 0;
+				int i = 0;
 
-			solutionComboOutput.setText(resultSkipsText);
-			highlight(bestSkips);
+				String resultSkipsText = "" + (answer.getSkips()[0] - 2);
+				cursorOnVals += answer.getSkips()[0] - 2;
+				i++;
+				while (i < counterLength)
+				{
+
+					cursorOnVals += answer.getSkips()[i];
+
+					if (cursorOnVals <= NUMBER_OF_NUMBERS)
+						resultSkipsText += (", " + answer.getSkips()[i]);
+					i++;
+				}
+
+				solutionComboOutput.setText(resultSkipsText);
+				highlight(answer.getSkips());
+
+				break;
+			case "console":
+
 		}
+
 	}
 
 	public void highlight(int[] solutionSkips)
 	{
 		int cursorHighlighter = -2;
-//		System.out.println(searcher.getNumberString());
-
 		int cursorCounterHighlighter = 0;
-		cursorHighlighter += solutionSkips[cursorCounterHighlighter];
-		while (cursorHighlighter < NUMBER_OF_NUMBERS && cursorCounterHighlighter < counterLength - 1)
+
+		while (cursorHighlighter <= NUMBER_OF_NUMBERS && cursorCounterHighlighter <= counterLength - 1)
 		{
-			cursorCounterHighlighter++;
-			System.out.println("l" + solutionSkips[cursorCounterHighlighter]);
-			numberInput[cursorHighlighter].setBackground(Color.YELLOW);
-			System.out.println("f" + cursorCounterHighlighter + "g" + cursorHighlighter);
+//			System.out.println("l" + solutionSkips[cursorCounterHighlighter]);
+//			System.out.println("f" + cursorCounterHighlighter + "g" + cursorHighlighter);
+//			System.out.println(cursorHighlighter + " " + NUMBER_OF_NUMBERS);
 
 			cursorHighlighter += solutionSkips[cursorCounterHighlighter];
-			System.out.println(cursorHighlighter + " " + NUMBER_OF_NUMBERS);
+			if (cursorHighlighter <= NUMBER_OF_NUMBERS)
+				numberInput[cursorHighlighter].setBackground(Color.YELLOW);
+			cursorCounterHighlighter++;
 		}
 
 	}
@@ -229,8 +222,10 @@ public class NonAdjacentSum extends JFrame implements ActionListener
 	public static void main(String[] args)
 	{
 		NonAdjacentSum window = new NonAdjacentSum();
-		window.setBounds(300, 50, (int) (myDimension.getWidth() * 2),
-				(int) ((NUMBER_OF_NUMBERS) * myDimension.getHeight()));
+		window.setBounds(	300,
+							50,
+							(int) (boxSize.getWidth() * 2),
+							(int) ((NUMBER_OF_NUMBERS + 2) * boxSize.getHeight()));
 		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
