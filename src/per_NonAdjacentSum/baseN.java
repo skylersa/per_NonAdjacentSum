@@ -14,7 +14,6 @@ public class BaseN
 	private int base;
 	private int[] digit = new int[100];
 	private int counter;
-//	private int ursor;
 	private int min;
 
 	public BaseN(int baseIn, int lengthIn, int minIn)
