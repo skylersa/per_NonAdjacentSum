@@ -113,11 +113,6 @@ public class BaseN
 		return length;
 	}
 
-//	public int getCursor()
-//	{
-//		return cursor;
-//	}
-
 	public int getCounter()
 	{
 		return counter;
