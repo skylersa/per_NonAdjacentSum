@@ -2,7 +2,15 @@
 // 11/27
 // rev 4
 //notes:
-//
+//this cllass uses the BaseN class to cycle through the number 
+//of skips in order tofind every possible sum where each of the 
+//numbers are not touching iwthin the array enter in the GUI. 
+//This class also creates the gui. using solve sum will use 
+//two nested whule loops in order to return the largest no 
+//adjacent sum from the array enter into the method. I 
+//still plan to make a tester in order to throughly test 
+//the methods using a console input
+
 package per_NonAdjacentSum;
 
 import java.awt.BorderLayout;
